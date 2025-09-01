@@ -1,7 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { FaUser, FaTools, FaProjectDiagram, FaEnvelope } from "react-icons/fa";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { SiGmail } from "react-icons/si";
+import { useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 export default function Hero() {
   const sections = [
@@ -31,23 +33,45 @@ export default function Hero() {
 
   const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hamza20021asif@gmail.com&su=Hello%20Hamza&body=Hi%20Hamza,%0A%0A`;
 
+  const controls = useAnimation();
+  const [ref, inView] = useInView({ triggerOnce: false, threshold: 0.3 });
+  // triggerOnce: false => animation plays every time in view
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 1 },
+      });
+    } else {
+      controls.start({ opacity: 0, y: -50 }); // reset animation when out of view
+    }
+  }, [inView, controls]);
+
   return (
-    <section className="relative flex flex-col justify-center items-center text-center bg-gray-50 dark:bg-gray-900 overflow-visible scroll-smooth px-4 sm:px-6 lg:px-0 min-h-screen">
+    <section
+      ref={ref}
+      className="relative flex flex-col justify-center items-center text-center bg-gray-50 dark:bg-gray-900 overflow-visible scroll-smooth px-4 sm:px-6 lg:px-0 min-h-screen"
+    >
       {/* Hero Banner */}
-      <div className="w-full flex justify-center mb-4 sm:mb-6">
+      <motion.div
+        className="w-full flex justify-center mb-4 sm:mb-6"
+        initial={{ opacity: 0, y: -50 }}
+        animate={controls}
+      >
         <img
           src="./GitHubBanner.png"
           alt="Banner"
           className="w-full max-w-xl sm:max-w-3xl h-auto rounded-xl shadow-lg object-cover"
         />
-      </div>
+      </motion.div>
 
       {/* Hero Text */}
       <motion.h1
         className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold"
         initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
+        animate={controls}
       >
         Hi, I’m <span className="text-blue-600">Hamza</span> 👋
       </motion.h1>
@@ -55,8 +79,7 @@ export default function Hero() {
       <motion.p
         className="mt-4 text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300"
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 1 }}
+        animate={controls}
       >
         Front-End Developer | JavaScript | React.js | SQL <br />
         Currently Learning | Node.js | Express.js | MongoDB
@@ -66,8 +89,7 @@ export default function Hero() {
       <motion.div
         className="mt-6 flex flex-col sm:flex-row gap-4"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
+        animate={controls}
       >
         <a
           href="/Hamza-CV.pdf"
@@ -77,7 +99,6 @@ export default function Hero() {
           Download CV
         </a>
       </motion.div>
-
       {/* Right Side Sections (hidden on small screens) */}
       <div className="hidden sm:flex fixed right-4 top-1/2 transform -translate-y-1/2 flex-col gap-4 z-50">
         {sections.map((sec, i) => (
