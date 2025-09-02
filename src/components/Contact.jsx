@@ -1,18 +1,34 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FiSend } from "react-icons/fi";
+import emailjs from "@emailjs/browser";
 
 export default function Contact() {
   const [status, setStatus] = useState(null);
+  const form = useRef();
 
-  const handleSubmit = (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-    setStatus("✅ Your message has been submitted!");
-    e.target.reset();
 
-    // Remove the message after 5 seconds
-    setTimeout(() => {
-      setStatus(null);
-    }, 5000);
+    emailjs
+      .sendForm("service_t7us5rs", "template_ohxxq7t", form.current, {
+        publicKey: "9AfSNgMiMVhYEpNRz",
+      })
+      .then(
+        () => {
+          setStatus("✅ Your message has been submitted!");
+          e.target.reset();
+
+          // Remove the message after 5 seconds
+          setTimeout(() => {
+            setStatus(null);
+          }, 5000);
+        },
+        (error) => {
+          console.log("FAILED...", error.text);
+          setStatus("❌ Failed to send message. Please try again.");
+          setTimeout(() => setStatus(null), 5000);
+        }
+      );
   };
 
   return (
@@ -24,16 +40,20 @@ export default function Contact() {
         Contact Me
       </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
+      <form
+        ref={form}
+        onSubmit={sendEmail}
+        className="space-y-4 max-w-md mx-auto"
+      >
         <input
-          name="name"
+          name="from_name"
           placeholder="Your Name"
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           required
         />
         <input
           type="email"
-          name="email"
+          name="from_email"
           placeholder="Your Email"
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           required
