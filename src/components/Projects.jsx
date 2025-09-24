@@ -2,6 +2,14 @@ import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
 
 const projects = [
   {
+    img: "./projects/musicapp.png",
+    title: "Music App",
+    desc: "A responsive Music Web Application built with React, powered by the YouTube API. You can search for any song, listen to full music with video, and enjoy a smooth streaming experience.",
+    link: "https://github.com/HamzaAsif2002/Music-App",
+    live: "https://music-app-by-hamza.vercel.app/",
+    tech: ["ReactJS", "TailwindCSS", "YouTube-Api", "Axios", "React-Query"],
+  },
+  {
     img: "./projects/shoplane.png",
     title: "ShopLane",
     desc: "A modern and responsive e-commerce web app built with React and Tailwind CSS. Features product detail page, cart management using local storage, and a clean shopping experience.",

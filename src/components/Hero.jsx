@@ -2,7 +2,7 @@ import { motion, useAnimation } from "framer-motion";
 import { FaUser, FaTools, FaProjectDiagram, FaEnvelope } from "react-icons/fa";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { SiGmail } from "react-icons/si";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
 export default function Hero() {
